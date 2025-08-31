@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -15,8 +14,6 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -32,9 +29,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
     externalNativeBuild {
         cmake {
             path = file("src/main/cpp/CMakeLists.txt")
@@ -47,14 +41,6 @@ android {
 }
 
 dependencies {
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.constraintlayout)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 }
 
 // 任务 1: 复制二进制文件到模板目录（保持不变）
@@ -110,7 +96,7 @@ tasks.register<Zip>("packageMagiskModuleZip") {
     archiveVersion.set("0.0.2") // 版本号
 
     // 【关键】设置输出路径为你指定的目录
-    destinationDirectory.set(file("D:/Android Project/OplusKey/mod"))
+    destinationDirectory.set(file("$rootDir/mod"))
 }
 
 // 任务 3: 【更新】将最终的打包任务链接到 Android 的主构建流程

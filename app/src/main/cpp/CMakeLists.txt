@@ -2,15 +2,12 @@
 cmake_minimum_required(VERSION 3.22.1)
 
 # 声明项目名称
-project("MagiskCppTools")
+project("OplusKey")
 
 # 启用 C++17 标准，因为我们使用了 <filesystem>
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# --------------------------------------------------
-# 工具 1:
-# --------------------------------------------------
-#add_executable(temp_static temp_static.cpp)
-#target_link_libraries(temp_static android log)
-# TODO： 你改改
+# 添加可执行文件
+add_executable(oplus_key main.cpp)
+target_link_libraries(oplus_key log)
