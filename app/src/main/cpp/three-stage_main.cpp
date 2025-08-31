@@ -3,3 +3,7 @@
 void threeStageMain(const std::string& mod_dir) {
 
 }
+
+void threeStageExit() {
+
+}

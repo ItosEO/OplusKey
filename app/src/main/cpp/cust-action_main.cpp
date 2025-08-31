@@ -3,3 +3,7 @@
 void custActionMain(const std::string& mod_dir) {
 
 }
+
+void custActionExit() {
+
+}
