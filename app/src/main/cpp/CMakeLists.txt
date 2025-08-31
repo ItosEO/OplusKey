@@ -13,5 +13,6 @@ add_executable(oplus_key
         main.cpp
         three-stage_main.cpp
         cust-action_main.cpp
+        logger.cpp
 )
 target_link_libraries(oplus_key log)
