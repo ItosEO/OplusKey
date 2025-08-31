@@ -1,2 +1,1 @@
-rm -rf "/data/adb/modules_update/tri_exp_caelifall"
-rm -rf "/data/misc/user/0"
+chmod 0644 /proc/tristatekey/tri_state 2>/dev/null

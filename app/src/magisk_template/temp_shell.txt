@@ -1,21 +1,34 @@
-#微信付款码
+# 微信付款码
 am start -n com.tencent.mm/.plugin.offline.ui.WalletOfflineCoinPurseUI
 
-#支付宝付款码
+# 支付宝付款码
 am start -a android.intent.action.VIEW -d "alipays://platformapi/startapp?appId=20000056"
 
-#开手电筒
+# 开手电筒
 echo 0 > /sys/class/leds/led:torch_0/brightness; echo 0 > /sys/class/leds/led:switch_0/brightness; echo 500 > /sys/class/leds/led:torch_0/brightness; echo 1 > /sys/class/leds/led:switch_0/brightness
 
-#关手电筒
+# 关手电筒
 echo 0 > /sys/class/leds/led:torch_0/brightness; echo 0 > /sys/class/leds/led:switch_0/brightness
 
-#开关蓝牙
+# 开关蓝牙
 svc bluetooth enable
 svc bluetooth disable
 
-#开录音
+# 开录音
 am start --user 0 -n com.coloros.soundrecorder/.TransparentActivity >/dev/null 2>&1
 
-#关录音
+# 关录音
 am force-stop com.coloros.soundrecorder
+
+# Clash for Android内测版（v3.xxx）开关
+am startservice com.github.kr328.clash/com.github.kr328.clash.VpnService
+am stopservice com.github.kr328.clash/com.github.kr328.clash.VpnService
+注：只支持常规模式
+
+# Clash for Android（v2.xxx）开关
+am startservice com.github.kr328.clash/com.github.kr328.clash.service.TunService
+am stopservice com.github.kr328.clash/com.github.kr328.clash.service.TunService
+
+# Clash meta for Android开关
+am start -n com.github.metacubex.clash.meta/com.github.kr328.clash.ExternalControlActivity -a com.github.metacubex.clash.meta.action.STOP_CLASH
+am start -n com.github.metacubex.clash.meta/com.github.kr328.clash.ExternalControlActivity -a com.github.metacubex.clash.meta.action.START_CLASH
