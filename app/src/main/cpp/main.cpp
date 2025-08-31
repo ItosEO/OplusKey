@@ -2,6 +2,7 @@
 #include <csignal>
 #include "three-stage_main.h"
 #include "cust-action_main.h"
+#include "logger.h"
 
 int curr_mode = -1; // 0: three-stage, 1: cust-action
 
