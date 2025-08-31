@@ -9,5 +9,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # 添加可执行文件
-add_executable(oplus_key main.cpp)
+add_executable(oplus_key
+        main.cpp
+        three-stage_main.cpp
+        cust-action_main.cpp
+)
 target_link_libraries(oplus_key log)
