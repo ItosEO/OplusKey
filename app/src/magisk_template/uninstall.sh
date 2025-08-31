@@ -1,1 +1,1 @@
-chmod 0644 /proc/tristatekey/tri_state 2>/dev/null
+chmod 0644 /proc/tristatekey/tri_state 2 >/dev/null

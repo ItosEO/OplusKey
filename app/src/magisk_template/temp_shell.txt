@@ -4,11 +4,17 @@ am start -n com.tencent.mm/.plugin.offline.ui.WalletOfflineCoinPurseUI
 # 支付宝付款码
 am start -a android.intent.action.VIEW -d "alipays://platformapi/startapp?appId=20000056"
 
-# 开手电筒
-echo 0 > /sys/class/leds/led:torch_0/brightness; echo 0 > /sys/class/leds/led:switch_0/brightness; echo 500 > /sys/class/leds/led:torch_0/brightness; echo 1 > /sys/class/leds/led:switch_0/brightness
+# 支付宝扫码
+am start -n com.eg.android.AlipayGphone/com.alipay.mobile.scan.as.main.MainCaptureActivity
 
-# 关手电筒
-echo 0 > /sys/class/leds/led:torch_0/brightness; echo 0 > /sys/class/leds/led:switch_0/brightness
+# 微信扫码
+am start -n com.tencent.mm/.plugin.scanner.ui.BaseScanUI
+
+# 开手电筒（只支持骁龙设备）
+echo 500 > /sys/class/leds/led:torch_0/brightness;echo 1 > /sys/class/leds/led:switch_0/brightness
+
+# 关手电筒（只支持骁龙设备）
+echo 0 > /sys/class/leds/led:torch_0/brightness;echo 0 > /sys/class/leds/led:switch_0/brightness
 
 # 开关蓝牙
 svc bluetooth enable
@@ -19,6 +25,16 @@ am start --user 0 -n com.coloros.soundrecorder/.TransparentActivity >/dev/null 2
 
 # 关录音
 am force-stop com.coloros.soundrecorder
+
+# 开录屏
+screenrecord /sdcard/demo.mp4 >/dev/null 2>&1 &
+--size WxH	设置录制分辨率
+--bit-rate X	设置比特率 Mbps，默认 4 Mbps
+--time-limit	最大录制时长（秒），默认/上限一般为 180 秒
+--bugreport	添加时间戳等调试信息
+
+# 关录屏
+pkill -l screenrecord
 
 # Clash for Android内测版（v3.xxx）开关
 am startservice com.github.kr328.clash/com.github.kr328.clash.VpnService
