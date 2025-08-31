@@ -1,6 +1,6 @@
-id=tri_exp_caelifall
-name=一加の三段键拓展
-version=v1.1.3
-versioncode=250830
-author=Caelifall
-description=拓展你的一加三段式侧键功能
+id=action_exp
+name=Oplus侧键拓展
+version=v1.0.1
+versioncode=250901
+author=ItosEO & YangFengTuoZi
+description=拓展你的一加侧键功能(三段式和快捷键)
