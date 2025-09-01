@@ -17,6 +17,4 @@ if [ -f "$MODDIR/disable_tri" ] && [ "$MODE" = "three-stage" ]; then
 fi
 
 nohup "$MODDIR/oplus_key" $MODE > /dev/null 2>&1 &
-sleep 1
-taskset -pa 1 $(pidof oplus_key)
 # nohup "$MODDIR/oplus_key" cust-action > /cache/opluskeysh 2>&1 &
