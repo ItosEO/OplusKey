@@ -61,4 +61,4 @@ echo ""
 echo "感谢使用本模块！"
 echo "作者：ItosEO & YangFengTuoZi"
 echo "-------------------------------------------"
-set_perm_recursive $MODPATH 0 0 0755 0644
+set_perm_recursive $MODPATH 0 0 0755 0755
