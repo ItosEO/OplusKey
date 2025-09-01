@@ -13,7 +13,7 @@ else
 fi
 
 if [ -f "$MODDIR/disable_tri" ] && [ "$MODE" = "three-stage" ]; then
-    chmod 0200 "$tri_file" 2>/dev/null
+    chmod 0200 "/proc/tristatekey/tri_state" 2>/dev/null
 fi
 
 nohup "$MODDIR/oplus_key" $MODE > /dev/null 2>&1 &
