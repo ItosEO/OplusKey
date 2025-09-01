@@ -7,9 +7,9 @@ while [ "$(getprop sys.boot_completed)" != "1" ] ; do
 done
 
 if [ -f "/proc/tristatekey/tri_state" ]; then
-    MODE = "three-stage"
+    MODE="three-stage"
 else
-    MODE = "cust-action"
+    MODE="cust-action"
 fi
 
 nohup "$MODDIR/oplus_key" $MODE > /dev/null 2>&1 &
