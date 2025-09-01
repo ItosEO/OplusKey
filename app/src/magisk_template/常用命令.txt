@@ -1,3 +1,8 @@
+如果您是传统三段式按键，请编辑模块目录的 t-stage.sh 脚本，并按照提示自定义操作
+如果您是新版自定义按键，请编辑模块目录的 cust.sh 脚本，并按照提示自定义操作
+
+-------------------------------------------------------------------------------------------------
+
 # 微信付款码
 am start -n com.tencent.mm/.plugin.offline.ui.WalletOfflineCoinPurseUI
 
@@ -35,6 +40,9 @@ screenrecord /sdcard/demo.mp4 >/dev/null 2>&1 &
 
 # 关录屏
 pkill -l screenrecord
+
+# 打开相机
+am start -n com.oplus.camera/com.oplus.camera.Camera
 
 # Clash for Android内测版（v3.xxx）开关
 am startservice com.github.kr328.clash/com.github.kr328.clash.VpnService
