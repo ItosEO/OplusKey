@@ -27,9 +27,11 @@ toggle_tristate() {
     local perm=$(stat -c %a "$tri_file" 2>/dev/null || echo "")
     if [ "$perm" = "200" ]; then
         chmod 0644 "$tri_file" 2>/dev/null
+        rm -rf "$MODDIR/disable_tri" 2>/dev/null
         echo "[三段式] 当前状态: 已解除屏蔽"
     else
         chmod 0200 "$tri_file" 2>/dev/null
+        touch "$MODDIR/disable_tri" 2>/dev/null
         echo "[三段式] 当前状态: 已设置屏蔽"
     fi
 }

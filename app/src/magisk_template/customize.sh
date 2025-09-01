@@ -23,6 +23,7 @@ if [ -f "/proc/tristatekey/tri_state" ]; then
     echo "✅ 检测到 [三段式侧键]"
     echo "👉 请在模块目录中的 t-stage.sh 中自定义操作"
     chmod 0200 /proc/tristatekey/tri_state 2 >/dev/null
+    touch "$MODDIR/disable_tri"
     echo "⚠️ 已屏蔽系统原有功能（卸载自动恢复，也可在 action 功能调整）"
 else
     echo "✅ 检测到 [自定义按键]"

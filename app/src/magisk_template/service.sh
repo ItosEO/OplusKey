@@ -12,5 +12,9 @@ else
     MODE="cust-action"
 fi
 
+if [ -f "$MODDIR/disable_tri" ] && [ "$MODE" = "three-stage" ]; then
+    chmod 0200 "$tri_file" 2>/dev/null
+fi
+
 nohup "$MODDIR/oplus_key" $MODE > /dev/null 2>&1 &
 # nohup "$MODDIR/oplus_key" cust-action > /cache/opluskeysh 2>&1 &
