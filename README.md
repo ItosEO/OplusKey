@@ -2,10 +2,6 @@
 
 > 让三段式 / 新版侧键摆脱局限，解锁更多可能。
 
-## 联合开发者
-
-* [@yangFenTuoZi](https://github.com/yangFenTuoZi)
-
 ## 功能介绍
 
 ### 传统三段式按键
