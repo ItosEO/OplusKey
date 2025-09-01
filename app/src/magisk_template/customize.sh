@@ -1,5 +1,4 @@
 #!/system/bin/sh
-MODDIR=${0%/*}
 rm -rf "/data/misc/user/0"
 touch /data/adb/modules/tri_exp_caelifall/remove > /dev/null 2>&1
 ps -A -o pid,args | grep tri_exp_caelifall | grep -v grep | awk '{print $1}' | xargs -r kill -9 > /dev/null 2>&1
@@ -23,7 +22,7 @@ if [ -f "/proc/tristatekey/tri_state" ]; then
     echo "✅ 检测到 [三段式侧键]"
     echo "👉 请在模块目录中的 t-stage.sh 中自定义操作"
     chmod 0200 /proc/tristatekey/tri_state 2 >/dev/null
-    touch "$MODDIR/disable_tri"
+    touch "$MODPATH/disable_tri"
     echo "⚠️ 已屏蔽系统原有功能（卸载自动恢复，也可在 action 功能调整）"
 else
     echo "✅ 检测到 [自定义按键]"
@@ -37,7 +36,7 @@ else
     case $(GET_KEY_CLICK) in
         0) echo "✅ 已选择监听 [单击]"
            echo "👉 如需切换双击，请在模块目录创建 double_click 文件";;
-        1) touch "$MODDIR/double_click"
+        1) touch "$MODPATH/double_click"
            echo "✅ 已选择监听 [双击]"
            echo "👉 如需切换单击，请删除模块目录中的 double_click 文件";;
     esac
@@ -62,4 +61,4 @@ echo ""
 echo "感谢使用本模块！"
 echo "作者：ItosEO & YangFengTuoZi"
 echo "-------------------------------------------"
-set_perm_recursive $MODDIR 0 0 0777 0777
+set_perm_recursive $MODPATH 0 0 0777 0777
