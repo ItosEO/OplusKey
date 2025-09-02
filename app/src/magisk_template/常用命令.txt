@@ -44,6 +44,11 @@ pkill -l screenrecord
 # 打开相机
 am start -n com.oplus.camera/com.oplus.camera.Camera
 
+# 开始录制视频
+am start -W -a android.media.action.VIDEO_CAMERA && sleep 1 && input keyevent KEYCODE_VOLUME_UP
+# 停止录制
+input keyevent KEYCODE_VOLUME_UP
+
 # Clash for Android内测版（v3.xxx）开关
 am startservice com.github.kr328.clash/com.github.kr328.clash.VpnService
 am stopservice com.github.kr328.clash/com.github.kr328.clash.VpnService

@@ -97,7 +97,7 @@ tasks.register<Zip>("packageMagiskModuleZip") {
     from(file("src/magisk_template"))
     // 设置 zip 包内部的根目录（可选，这里设置为空，即直接打包文件夹内容）
     archiveBaseName.set("OplusKey_Magisk") // 输出的 zip 文件名
-    archiveVersion.set("1.0.4") // 版本号
+    archiveVersion.set("1.1.0") // 版本号
 
     // 【关键】设置输出路径为你指定的目录
     destinationDirectory.set(file("$rootDir/mod"))
