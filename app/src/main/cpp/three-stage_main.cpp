@@ -8,25 +8,19 @@
 #include <fcntl.h>
 #include <errno.h>
 
-// tri_state 持久 fd，减少反复构造 iostream 的开销
-static int g_triFd = -1;
-
-static std::string readTriStateOnce(bool& ok) {
-    if (g_triFd < 0) {
-        g_triFd = open("/proc/tristatekey/tri_state", O_RDONLY | O_CLOEXEC);
-        if (g_triFd < 0) {
-            ok = false;
-            return {};
-        }
+static std::string readTriStateFromFd(int fd, bool& ok) {
+    if (fd < 0) {
+        ok = false;
+        return {};
     }
 
-    if (lseek(g_triFd, 0, SEEK_SET) < 0) {
+    if (lseek(fd, 0, SEEK_SET) < 0) {
         ok = false;
         return {};
     }
 
     char buf[16];
-    ssize_t n = read(g_triFd, buf, sizeof(buf) - 1);
+    ssize_t n = read(fd, buf, sizeof(buf) - 1);
     if (n <= 0) {
         ok = false;
         return {};
@@ -54,16 +48,26 @@ void threeStageMain(const std::string& mod_dir) {
     pfd.events = POLLIN;
     pfd.revents = 0;
 
+    // tri_state fd 在事件循环生命周期内持久化
+    int triFd = open("/proc/tristatekey/tri_state", O_RDONLY | O_CLOEXEC);
+    if (triFd < 0) {
+        LOG_WARN("无法打开 /proc/tristatekey/tri_state，启动后将于首次 F3 尝试重开");
+    }
+
     // 初始化 tri_state（若失败，等待首次 KEY_F3 再初始化，不触发脚本）
     std::string lastValue;
     bool hasInitial = false;
     {
         bool ok = false;
-        std::string initVal = readTriStateOnce(ok);
-        if (ok) {
-            lastValue = initVal;
-            hasInitial = true;
-            LOG_INFO(std::string("三段键初始值: ") + initVal);
+        if (triFd >= 0) {
+            std::string initVal = readTriStateFromFd(triFd, ok);
+            if (ok) {
+                lastValue = initVal;
+                hasInitial = true;
+                LOG_INFO(std::string("三段键初始值: ") + initVal);
+            } else {
+                LOG_WARN("无法读取 /proc/tristatekey/tri_state，等待事件后再初始化");
+            }
         } else {
             LOG_WARN("无法读取 /proc/tristatekey/tri_state，等待事件后再初始化");
         }
@@ -97,9 +101,22 @@ void threeStageMain(const std::string& mod_dir) {
         ssize_t n = 0;
         while ((n = read(pfd.fd, &ev, sizeof(ev))) == (ssize_t)sizeof(ev)) {
             if (ev.type == EV_KEY && ev.code == KEY_F3) {
-                // 捕获 KEY_F3：读取 tri_state
+                // 捕获 KEY_F3：读取 tri_state（失败一次性重开重试）
                 bool ok = false;
-                std::string curr = readTriStateOnce(ok);
+                if (triFd < 0) {
+                    triFd = open("/proc/tristatekey/tri_state", O_RDONLY | O_CLOEXEC);
+                }
+                std::string curr;
+                if (triFd >= 0) {
+                    curr = readTriStateFromFd(triFd, ok);
+                }
+                if (!ok) {
+                    if (triFd >= 0) { close(triFd); triFd = -1; }
+                    triFd = open("/proc/tristatekey/tri_state", O_RDONLY | O_CLOEXEC);
+                    if (triFd >= 0) {
+                        curr = readTriStateFromFd(triFd, ok);
+                    }
+                }
                 if (!ok) {
                     LOG_ERROR("读取 /proc/tristatekey/tri_state 失败，退出事件循环");
                     shouldExit = true;
@@ -144,7 +161,7 @@ void threeStageMain(const std::string& mod_dir) {
 
     // 清理：关闭 fd
     if (pfd.fd >= 0) close(pfd.fd);
-    if (g_triFd >= 0) { close(g_triFd); g_triFd = -1; }
+    if (triFd >= 0) close(triFd);
     LOG_INFO("三段键事件监听已退出");
 }
 
