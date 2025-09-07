@@ -3,7 +3,6 @@
 #include <string>
 #include <unistd.h>
 #include "utils.h"
-// 新增头文件：事件与设备
 #include <poll.h>
 #include <linux/input.h>
 #include <fcntl.h>
@@ -73,7 +72,7 @@ void threeStageMain(const std::string& mod_dir) {
     // 事件循环：等待输入事件，仅在 KEY_F3 时读取 tri_state 并按变化触发脚本
     bool shouldExit = false;
     while (true) {
-        int ret = poll(&pfd, static_cast<nfds_t>(1), 3000);
+        int ret = poll(&pfd, static_cast<nfds_t>(1), -1);
         if (ret < 0) {
             if (errno == EINTR) continue;
             LOG_ERROR("poll 失败，退出事件循环");
