@@ -1,6 +1,5 @@
 #include "three-stage_main.h"
 #include "logger.h"
-#include <fstream>
 #include <string>
 #include <unistd.h>
 #include "utils.h"
@@ -10,14 +9,35 @@
 #include <fcntl.h>
 #include <errno.h>
 
+// tri_state 持久 fd，减少反复构造 iostream 的开销
+static int g_triFd = -1;
+
 static std::string readTriStateOnce(bool& ok) {
-    std::ifstream fin("/proc/tristatekey/tri_state");
-    if (!fin.is_open()) {
+    if (g_triFd < 0) {
+        g_triFd = open("/proc/tristatekey/tri_state", O_RDONLY | O_CLOEXEC);
+        if (g_triFd < 0) {
+            ok = false;
+            return {};
+        }
+    }
+
+    if (lseek(g_triFd, 0, SEEK_SET) < 0) {
         ok = false;
         return {};
     }
-    std::string line;
-    std::getline(fin, line);
+
+    char buf[16];
+    ssize_t n = read(g_triFd, buf, sizeof(buf) - 1);
+    if (n <= 0) {
+        ok = false;
+        return {};
+    }
+    buf[n] = '\0';
+
+    std::string line(buf);
+    while (!line.empty() && (line.back() == '\n' || line.back() == '\r' || line.back() == ' ' || line.back() == '\t')) {
+        line.pop_back();
+    }
     ok = true;
     return line;
 }
@@ -125,12 +145,10 @@ void threeStageMain(const std::string& mod_dir) {
 
     // 清理：关闭 fd
     if (pfd.fd >= 0) close(pfd.fd);
+    if (g_triFd >= 0) { close(g_triFd); g_triFd = -1; }
     LOG_INFO("三段键事件监听已退出");
 }
 
 void threeStageExit() {
-    if (fd >= 0) {
-        close(fd);
-        fd = -1;
-    }
+    // no-op：退出时机由线程/进程销毁或致命 I/O 错误决定
 }
