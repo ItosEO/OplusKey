@@ -19,7 +19,7 @@ static std::string readTriStateFromFd(int fd, bool& ok) {
         return {};
     }
 
-    char buf[16];
+    char buf[8];
     ssize_t n = read(fd, buf, sizeof(buf) - 1);
     if (n <= 0) {
         ok = false;

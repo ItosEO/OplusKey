@@ -26,6 +26,10 @@ int main(int argc, char** argv) {
         return 1;
     }
 
+    // 初始化日志（全局一次）
+    Logger::initialize();
+    std::atexit(Logger::shutdown);
+
     // 添加退出hook
     atexit(onExit);
     signal(SIGINT, signalHandler);

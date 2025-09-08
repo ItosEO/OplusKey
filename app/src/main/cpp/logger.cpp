@@ -4,10 +4,35 @@
 #include <chrono>
 #include <iomanip>
 #include <sstream>
+#include <cstdlib>
 
 // 静态成员定义
 std::mutex Logger::log_mutex;
 const std::string Logger::LOG_FILE_PATH = "/cache/OplusKey.log";
+std::ofstream Logger::log_stream;
+bool Logger::is_open = false;
+
+// 初始化与关闭
+void Logger::initialize() {
+    std::lock_guard<std::mutex> lock(log_mutex);
+    if (is_open) return;
+    log_stream.open(LOG_FILE_PATH, std::ios::out | std::ios::app);
+    if (!log_stream.is_open()) {
+        std::cerr << "无法打开日志文件: " << LOG_FILE_PATH << std::endl;
+        is_open = false;
+        return;
+    }
+    is_open = true;
+    std::atexit(Logger::shutdown);
+}
+
+void Logger::shutdown() {
+    std::lock_guard<std::mutex> lock(log_mutex);
+    if (!is_open) return;
+    log_stream.flush();
+    log_stream.close();
+    is_open = false;
+}
 
 // 获取当前时间戳字符串
 std::string Logger::getCurrentTimestamp() {
@@ -37,22 +62,20 @@ std::string Logger::getLevelString(LogLevel level) {
 void Logger::writeLog(LogLevel level, const std::string& message, const std::string& function) {
     std::lock_guard<std::mutex> lock(log_mutex);
 
-    std::ofstream logFile(LOG_FILE_PATH, std::ios::app);
-    if (!logFile.is_open()) {
-        std::cerr << "无法打开日志文件: " << LOG_FILE_PATH << std::endl;
+    if (!is_open) {
+        std::cerr << "日志未初始化，无法写入: " << LOG_FILE_PATH << std::endl;
         return;
     }
 
     std::string timestamp = getCurrentTimestamp();
     std::string levelStr = getLevelString(level);
 
-    logFile << "[" << timestamp << "] " << levelStr;
+    log_stream << "[" << timestamp << "] " << levelStr;
     if (!function.empty()) {
-        logFile << " [" << function << "]";
+        log_stream << " [" << function << "]";
     }
-    logFile << " " << message << std::endl;
-
-    logFile.close();
+    log_stream << " " << message << std::endl;
+    log_stream.flush();
 }
 
 // 各级别便捷函数

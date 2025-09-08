@@ -3,6 +3,7 @@
 
 #include <string>
 #include <mutex>
+#include <fstream>
 
 // 日志级别枚举
 enum class LogLevel {
@@ -17,11 +18,15 @@ class Logger {
 private:
     static std::mutex log_mutex;
     static const std::string LOG_FILE_PATH;
+    static std::ofstream log_stream;
+    static bool is_open;
 
     static std::string getCurrentTimestamp();
     static std::string getLevelString(LogLevel level);
 
 public:
+    static void initialize();
+    static void shutdown();
     static void writeLog(LogLevel level, const std::string& message, const std::string& function = "");
 
     static void debug(const std::string& message, const std::string& function = "");
