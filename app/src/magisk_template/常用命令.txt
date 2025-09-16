@@ -20,6 +20,7 @@ echo 500 > /sys/class/leds/led:torch_0/brightness;echo 1 > /sys/class/leds/led:s
 
 # 关手电筒（只支持骁龙设备）
 echo torch0_trigger > /sys/class/leds/led:torch_0/trigger;echo 0 > /sys/class/leds/led:torch_0/brightness;echo switch0_trigger > /sys/class/leds/led:switch_0/trigger;echo torch0_trigger > /sys/class/leds/led:torch_0/trigger
+
 # 开关蓝牙
 svc bluetooth enable
 svc bluetooth disable
